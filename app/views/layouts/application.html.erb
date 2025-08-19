@@ -28,9 +28,8 @@
 
       <div class="nav-right">
         <% if author_signed_in? %>
-          <span class="nav-user">Hi, <%= current_author.email %></span>
-          <%= button_to "Logout", destroy_author_session_path, 
-                method: :delete, class: "btn btn-danger nav-logout" %>
+        <%= button_to "Logout", destroy_author_session_path, method: :delete, class: "btn btn-danger" %>
+
         <% else %>
           <%= link_to "Login", new_author_session_path, class: "btn btn-primary" %>
           <%= link_to "Sign Up", new_author_registration_path, class: "btn btn-secondary" %>
