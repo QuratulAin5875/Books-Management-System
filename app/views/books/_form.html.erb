@@ -1,0 +1,32 @@
+<div class="form-container">
+  <%= form_with(model: @book, local: true) do |f| %>
+    <div class="form-group">
+      <%= f.label :title, class: "form-label" %>
+      <%= f.text_field :title, class: "form-input" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :author_name, class: "form-label" %>
+      <%= f.text_field :author_name, class: "form-input" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :publisher, class: "form-label" %>
+      <%= f.text_field :publisher, class: "form-input" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :published_date, class: "form-label" %>
+      <%= f.date_field :published_date, class: "form-input" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :status, class: "form-label" %>
+      <%= f.select :status, ["Published", "Ongoing", "Draft", "Archived"], 
+                   { prompt: "Select status" }, 
+                   { class: "form-input" } %>
+    </div>
+
+    <%= f.submit "Save Book", class: "btn btn-primary" %>
+  <% end %>
+</div>

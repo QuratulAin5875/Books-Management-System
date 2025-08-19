@@ -1,0 +1,23 @@
+<h1 class="page-title">Authors List</h1>
+
+<div class="actions">
+  <%= link_to "➕ New Author", new_author_path, class: "btn btn-primary" %>
+</div>
+
+<ul class="author-list">
+  <% @authors.each do |author| %>
+    <li class="author-card">
+      <h3><%= author.name %></h3>
+      <p><%= truncate(author.bio, length: 80) %></p>
+
+      <div class="author-actions">
+        <%= link_to "Show", author_path(author), class: "btn btn-secondary" %>
+        <%= link_to "Edit", edit_author_path(author), class: "btn btn-warning" %>
+        <%= button_to "Delete", author_path(author),
+          method: :delete,
+          data: { turbo_confirm: "Are you sure?" },
+          class: "btn btn-danger" %>
+      </div>
+    </li>
+  <% end %>
+</ul>

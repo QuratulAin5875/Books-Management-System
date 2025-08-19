@@ -1,0 +1,24 @@
+<h1 class="page-title">Books</h1>
+
+<div class="actions">
+  <%= link_to "➕ New Book", new_book_path, class: "btn btn-primary" %>
+</div>
+
+<ul class="book-list">
+  <% @books.each do |book| %>
+    <li class="book-card">
+      <h3><%= book.title %></h3>
+      <p><strong>Author:</strong> <%= book.author_name %></p>
+      <p><strong>Status:</strong> <%= book.status %></p>
+
+      <div class="book-actions">
+        <%= link_to "Show", book_path(book), class: "btn btn-secondary" %>
+        <%= link_to "Edit", edit_book_path(book), class: "btn btn-warning" %>
+        <%= button_to "Delete", book_path(book),
+          method: :delete,
+          data: { confirm: "Are you sure?" },
+          class: "btn btn-danger" %>
+      </div>
+    </li>
+  <% end %>
+</ul>

@@ -1,0 +1,37 @@
+<div style="max-width:400px;margin:50px auto;padding:30px;background:#f9f9f9;
+            border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+
+  <h1 style="text-align:center;margin-bottom:20px;font-size:26px;font-weight:bold;color:#333;">
+    Log In
+  </h1>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div style="margin-bottom:20px;">
+      <%= f.label :email, style: "display:block;margin-bottom:8px;font-weight:600;color:#444;" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email",
+           style: "width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;" %>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <%= f.label :password, style: "display:block;margin-bottom:8px;font-weight:600;color:#444;" %>
+      <%= f.password_field :password, autocomplete: "current-password",
+           style: "width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;" %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px;">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+    <% end %>
+
+    <%= f.submit "Log In",
+          style: "display:inline-block;width:100%;padding:12px;
+                  border-radius:10px;border:none;font-weight:bold;
+                  background:#4CAF50;color:white;cursor:pointer;" %>
+  <% end %>
+
+  <div style="text-align:center;margin-top:15px;">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

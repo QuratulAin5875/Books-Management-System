@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres   # change if your PostgreSQL user is different
+  password: 123456 # set your actual password
+  host: localhost
+  pool: 5
+
+development:
+  <<: *default
+  database: author_app_development
+
+test:
+  <<: *default
+  database: author_app_test
+
+production:
+  <<: *default
+  database: author_app_production
+  username: author_app
+  password: <%= ENV['AUTHOR_APP_DATABASE_PASSWORD'] %>

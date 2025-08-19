@@ -1,0 +1,9 @@
+<div class="author-show">
+  <h1><%= @author.name %></h1>
+  <p><%= @author.bio %></p>
+
+  <div class="author-actions">
+    <%= link_to "⬅ Back", authors_path, class: "btn btn-secondary" %>
+    <%= link_to "✏ Edit", edit_author_path(@author), class: "btn btn-warning" %>
+  </div>
+</div>
