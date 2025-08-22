@@ -18,24 +18,26 @@
   <body>
     <!-- Navbar -->
     <nav class="navbar">
-      <div class="nav-left">
-        <%= link_to "Author App", root_path, class: "nav-brand" %>
-        <% if author_signed_in? %>
-          <%= link_to "Authors", authors_path, class: "nav-link" %>
-          <%= link_to "Books", books_path, class: "nav-link" %>
-        <% end %>
-      </div>
+  <div class="nav-left">
+    <%= link_to "Author App", root_path, class: "nav-brand" %>
 
-      <div class="nav-right">
-        <% if author_signed_in? %>
-        <%= button_to "Logout", destroy_author_session_path, method: :delete, class: "btn btn-danger" %>
+    <% if author_signed_in? %>
+      <%= link_to "Authors", authors_path, class: "nav-link" %>
+      <%= link_to "All Books", all_books_path, class: "nav-link" %>
+      <%= link_to "My Books", author_my_books_path(current_author), class: "nav-link" %>
+    <% end %>
+  </div>
 
-        <% else %>
-          <%= link_to "Login", new_author_session_path, class: "btn btn-primary" %>
-          <%= link_to "Sign Up", new_author_registration_path, class: "btn btn-secondary" %>
-        <% end %>
-      </div>
-    </nav>
+  <div class="nav-right">
+    <% if author_signed_in? %>
+      <%= button_to "Logout", destroy_author_session_path, method: :delete, class: "btn btn-danger" %>
+    <% else %>
+      <%= link_to "Login", new_author_session_path, class: "btn btn-primary" %>
+      <%= link_to "Sign Up", new_author_registration_path, class: "btn btn-secondary" %>
+    <% end %>
+  </div>
+</nav>
+
 
     <!-- Flash Messages -->
     <% flash.each do |type, msg| %>
