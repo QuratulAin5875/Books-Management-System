@@ -8,6 +8,7 @@
       <th>Publisher</th>
       <th>Published Date</th>
       <th>Status</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +19,20 @@
         <td><%= book.publisher %></td>
         <td><%= book.published_date %></td>
         <td><%= book.status %></td>
+        <td>
+          <!-- Show button for everyone -->
+          <%= link_to "Show", book_path(book, source: "all_books"), class: "btn btn-info btn-sm" %>
+
+
+          <!-- Extra actions only if this book belongs to current_author -->
+          <% if author_signed_in? && book.author_id == current_author.id %>
+            <%= link_to "Edit", edit_book_path(book), class: "btn btn-warning btn-sm" %>
+            <%= link_to "Delete", book_path(book),
+                        method: :delete,
+                        data: { confirm: "Are you sure you want to delete this book?" },
+                        class: "btn btn-danger btn-sm" %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

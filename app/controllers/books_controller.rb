@@ -1,14 +1,17 @@
 class BooksController < ApplicationController
    before_action :authenticate_author!, except: [:all_books]
 
-    def index
+  def index
     puts "current_user", current_author.id
     @books = Book.where(author_id: current_author.id)
   end
 
   def show
-    @book = current_author.books.find(params[:id])
+    @book = Book.find(params[:id])  # don't scope to current_author here
+           
   end
+
+
 
   def new
     @book = current_author.books.new
@@ -24,10 +27,10 @@ class BooksController < ApplicationController
   end
 end
 
-def all_books
-  books = Book.select(:title, :author_name, :status)
-  render json: books
-end
+
+  def all_books
+    @books = Book.includes(:author).all
+  end
 
   def edit
     @book = current_author.books.find(params[:id])
