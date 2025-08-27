@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
 
   </head>
 
@@ -31,6 +32,19 @@
   <div class="nav-right">
     <% if author_signed_in? %>
       <%= button_to "Logout", destroy_author_session_path, method: :delete, class: "btn btn-danger" %>
+      <div class="settings-wrapper">
+        <button id="settings-btn" class="btn btn-secondary settings-btn" aria-haspopup="true" aria-expanded="false">⚙️ Settings ▾</button>
+        <div id="settings-menu" class="hidden settings-dropdown">
+          <div class="settings-dropdown-inner">
+            <button id="light-mode-btn" class="btn btn-primary w-100">Light Mode</button>
+            <button id="dark-mode-btn" class="btn btn-secondary w-100">Dark Mode</button>
+            <div class="inline-actions">
+              <button id="font-increase" class="btn btn-primary w-100" aria-label="Increase font size">A+</button>
+              <button id="font-decrease" class="btn btn-primary w-100" aria-label="Decrease font size">A-</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <% else %>
       <%= link_to "Login", new_author_session_path, class: "btn btn-primary" %>
       <%= link_to "Sign Up", new_author_registration_path, class: "btn btn-secondary" %>
@@ -49,7 +63,7 @@
       <%= yield %>
     </main>
 
-   <%= javascript_include_tag "application", type: "module" %>
+   <%= javascript_include_tag "application", type: "module", data: { turbo_track: "reload" } %>
 
   </body>
 </html>

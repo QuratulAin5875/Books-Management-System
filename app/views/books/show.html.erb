@@ -5,6 +5,39 @@
 <p><strong>Published Date:</strong> <%= @book.published_date %></p>
 <p><strong>Status:</strong> <%= @book.status %></p>
 
+<div class="section-card">
+  <div class="section-header">
+    <h2>About this Book</h2>
+  </div>
+  <p><%= @book.about.presence || "No description added yet." %></p>
+</div>
+
+<div class="section-card">
+  <div class="section-header">
+    <h2>Chapters</h2>
+    <% if author_signed_in? && @book.author == current_author %>
+      <%= link_to "Add Chapter", new_book_chapter_path(@book), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+  <% if @book.chapters&.any? %>
+    <ol class="chapter-list">
+      <% @book.chapters.each do |chapter| %>
+        <li class="chapter-list-item">
+          <%= link_to chapter.title, book_chapter_path(@book, chapter), class: "chapter-link" %>
+          <% if @book.author == current_author %>
+            <div class="inline-actions">
+              <%= link_to "Edit", edit_book_chapter_path(@book, chapter), class: "btn btn-warning btn-sm" %>
+              <%= button_to "Delete", book_chapter_path(@book, chapter), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm inline-form" %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  <% else %>
+    <p>No chapters yet.</p>
+  <% end %>
+</div>
+
 <hr>
 
 <h2>Comments</h2>
@@ -18,12 +51,9 @@
           <%= comment.content %>
         </p>
         <% if comment.author == current_author %>
-          <div class="comment-actions">
+          <div class="inline-actions">
             <%= link_to "Edit", edit_book_comment_path(@book, comment), class: "btn btn-sm btn-warning" %>
-            <%= link_to "Delete", book_comment_path(@book, comment),
-                        method: :delete,
-                        data: { confirm: "Are you sure?" },
-                        class: "btn btn-sm btn-danger" %>
+            <%= button_to "Delete", book_comment_path(@book, comment), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger inline-form" %>
           </div>
         <% end %>
       </div>

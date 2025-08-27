@@ -1,0 +1,13 @@
+<h1 class="page-title">About: <%= @book.title %></h1>
+
+<div class="section-card">
+  <p><%= @book.about.presence || "No description added yet." %></p>
+</div>
+
+<div class="section-footer inline-actions">
+  <%= link_to "Back to Book", book_path(@book), class: "btn btn-secondary" %>
+  <% if author_signed_in? && @book.author == current_author %>
+    <%= link_to "Edit Book", edit_book_path(@book), class: "btn btn-warning" %>
+  <% end %>
+</div>
+

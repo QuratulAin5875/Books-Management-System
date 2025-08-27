@@ -30,7 +30,11 @@ get "/all_books", to: "books#all_books"
   root to: "books#index"
 
   resources :books do
+    member do
+      get :about
+    end
     resources :comments, only: [:create, :destroy, :edit, :destroy]
+    resources :chapters
   end
 
   if Rails.env.development?

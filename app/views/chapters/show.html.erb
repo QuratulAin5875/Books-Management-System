@@ -1,0 +1,24 @@
+<h1><%= @chapter.title %></h1>
+<hr>
+
+<div class="book-chapter-body">
+  <%= simple_format(@chapter.body) %>
+</div>
+
+<hr>
+
+<div class="inline-actions">
+  <% if @book.author == current_author %>
+    <%= link_to "Edit Chapter", edit_book_chapter_path(@book, @chapter), class: "btn btn-warning btn-sm" %>
+    <%= button_to "Delete", book_chapter_path(@book, @chapter), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm inline-form" %>
+  <% end %>
+  <%= link_to "Back to Book", book_path(@book), class: "btn btn-secondary btn-sm" %>
+</div>
+
+<style>
+  .book-chapter-body { white-space: pre-wrap; line-height: 1.6; }
+  .book-chapter-body p { margin-bottom: 12px; }
+  .book-chapter-body pre { background: #f7f7f7; padding: 10px; border-radius: 4px; }
+  .book-chapter-body code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
+</style>
+

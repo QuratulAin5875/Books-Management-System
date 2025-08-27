@@ -7,8 +7,11 @@ class BooksController < ApplicationController
   end
 
   def show
-    @book = Book.find(params[:id])  # don't scope to current_author here
-           
+    @book = Book.find(params[:id])
+  end
+
+  def about
+    @book = Book.find(params[:id])
   end
 
 
@@ -29,7 +32,11 @@ end
 
 
   def all_books
-    @books = Book.includes(:author).all
+    @page = (params[:page] || 1).to_i
+    @per_page = 6
+    @total_books = Book.count
+    @total_pages = (@total_books.to_f / @per_page).ceil
+    @books = Book.includes(:author).offset((@page - 1) * @per_page).limit(@per_page)
   end
 
   def edit
@@ -54,6 +61,6 @@ end
   private
 
   def book_params
-    params.require(:book).permit(:title, :author_name, :publisher, :published_date, :status)
+    params.require(:book).permit(:title, :author_name, :publisher, :published_date, :status, :about)
   end
 end

@@ -1,13 +1,14 @@
-<h1 class="page-title">Books</h1>
-
-<div class="actions">
-  <%= link_to "➕ New Book", new_book_path, class: "btn btn-primary" %>
+<div class="book-index-header">
+  <h1 class="page-title">My Books</h1>
+  <div class="actions">
+    <%= link_to "➕ New Book", new_book_path, class: "btn btn-primary" %>
+  </div>
 </div>
 
 <ul class="book-list">
   <% @books.each do |book| %>
     <li class="book-card">
-      <h3><%= book.title %></h3>
+      <h3 class="book-title"><%= book.title %></h3>
       <p><strong>Author:</strong> <%= book.author_name %></p>
       <p><strong>Status:</strong> <%= book.status %></p>
 
@@ -22,3 +23,13 @@
     </li>
   <% end %>
 </ul>
+<div class="pagination">
+  <% if @page && @total_pages %>
+    <% if @page > 1 %>
+      <%= link_to "Previous", author_my_books_path(current_author, page: @page - 1) %>
+    <% end %>
+    <% if @page < @total_pages %>
+      <%= link_to "Next", author_my_books_path(current_author, page: @page + 1) %>
+    <% end %>
+  <% end %>
+</div>
