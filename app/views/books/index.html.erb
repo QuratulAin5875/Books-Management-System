@@ -1,24 +1,36 @@
-<h1 class="page-title">Books</h1>
-
-<div class="actions">
-  <%= link_to "➕ New Book", new_book_path, class: "btn btn-primary" %>
+<div class="book-index-header">
+  <h1 class="page-title">My Books</h1>
+  <div class="actions">
+    <%= link_to "➕ New Book", new_book_path, class: "btn btn-primary" %>
+  </div>
 </div>
 
 <ul class="book-list">
   <% @books.each do |book| %>
     <li class="book-card">
-      <h3><%= book.title %></h3>
-      <p><strong>Author:</strong> <%= book.author_name %></p>
-      <p><strong>Status:</strong> <%= book.status %></p>
-
+      <div>
+        <h3 class="book-title"><%= book.title %></h3>
+        <p><strong>Author:</strong> <%= book.author_name %></p>
+        <p><strong>Status:</strong> <%= book.status %></p>
+      </div>
       <div class="book-actions">
         <%= link_to "Show", book_path(book), class: "btn btn-secondary" %>
         <%= link_to "Edit", edit_book_path(book), class: "btn btn-warning" %>
         <%= button_to "Delete", book_path(book),
           method: :delete,
-          data: { confirm: "Are you sure?" },
+          data: { confirm: "Are you sure you want to delete this book?" },
           class: "btn btn-danger" %>
       </div>
     </li>
   <% end %>
 </ul>
+
+<div class="pagination">
+  <% if @page > 1 %>
+    <%= link_to "Previous", author_books_path(current_author, page: @page - 1) %>
+  <% end %>
+  <% if @page < @total_pages %>
+    <%= link_to "Next", author_books_path(current_author, page: @page + 1) %>
+  <% end %>
+</div>
+

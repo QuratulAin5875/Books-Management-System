@@ -1,0 +1,33 @@
+<div class="chapter-new-page">
+  <div class="chapter-new-header">
+    <h1>New Chapter for <%= @book.title %></h1>
+  </div>
+  <div class="chapter-new-container">
+    <%= render "form" %>
+  </div>
+  <div class="chapter-new-footer"></div>
+  <style>
+    .chapter-new-page {
+      background: linear-gradient(135deg, #e1effe 0%, #dbeafe 40%, #eff6ff 100%);
+      min-height: 100vh;
+      padding: 24px 14px;
+    }
+    .chapter-new-header {
+      max-width: 840px;
+      margin: 0 auto 12px auto;
+      text-align: center;
+      color: #1e3a8a; /* blue-900 */
+    }
+    .chapter-new-header .subtitle {
+      color: #3b82f6; /* blue-500 */
+      margin-top: 4px;
+    }
+    .chapter-new-container {
+      max-width: 950px;
+      margin: 0 auto;
+    }
+    .chapter-new-footer { height: 12px; }
+  </style>
+</div>
+
+

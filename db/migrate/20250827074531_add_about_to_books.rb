@@ -1,0 +1,5 @@
+class AddAboutToBooks < ActiveRecord::Migration[8.0]
+  def change
+    add_column :books, :about, :text
+  end
+end

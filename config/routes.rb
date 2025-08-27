@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :authors do
-    get "books/index"
-  end
   devise_for :authors
 
   get "up" => "rails/health#show", as: :rails_health_check
@@ -18,19 +15,24 @@ Rails.application.routes.draw do
   delete "/authors/:id",      to: "authors#destroy"
   get "/about-authors", to: "authors#about", as: "about_authors"
 
-get "/all_books", to: "books#all_books"
+  # ✅ All Books (global)
+  get "/all_books", to: "books#all_books", as: :all_books
 
-
-  # ✅ "My Books" (only books belonging to the logged-in author)
+  # ✅ Author’s own books (scoped under /authors/:author_id/books)
   resources :authors, only: [] do
-    resources :books, only: [:index], controller: "authors/books", as: "my_books"
+    resources :books, only: [:index], controller: "books"
   end
 
   # Root after login
   root to: "books#index"
 
+  # Books CRUD + comments
   resources :books do
     resources :comments, only: [:create, :destroy, :edit, :destroy]
+    resources :chapters
+    member do
+      get :about
+    end
   end
 
   if Rails.env.development?
