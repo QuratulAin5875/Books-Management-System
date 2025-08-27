@@ -11,7 +11,19 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": 
+ "reload" %>
+
+    <style>
+      .hidden { display: none; }
+      body.dark-mode { background-color: #0f172a; color: #e5e7eb; }
+      body.dark-mode a { color: #93c5fd; }
+      body.dark-mode .navbar { background-color: #111827; }
+      body.dark-mode .btn { color: #e5e7eb; }
+      /* Settings menu basic styling fallbacks */
+      #settings-menu { background: #ffffff; }
+      body.dark-mode #settings-menu { background: #1f2937; border-color: #374151; }
+    </style>
 
   </head>
 
@@ -24,20 +36,34 @@
     <% if author_signed_in? %>
       <%= link_to "Authors", authors_path, class: "nav-link" %>
       <%= link_to "All Books", all_books_path, class: "nav-link" %>
-      <%= link_to "My Books", author_my_books_path(current_author), class: "nav-link" %>
+      <%= link_to "My Books", author_books_path(current_author), class: "nav-link" %>
+
     <% end %>
   </div>
 
   <div class="nav-right">
     <% if author_signed_in? %>
       <%= button_to "Logout", destroy_author_session_path, method: :delete, class: "btn btn-danger" %>
+      <div class="relative settings-wrapper" style="position: relative;">
+        <button id="settings-btn" class="btn btn-secondary settings-btn dropdown" aria-haspopup="true" aria-expanded="false">⚙️ Settings ▾</button>
+        <div id="settings-menu" class="hidden absolute right-0 mt-2 w-56 settings-dropdown z-10">
+          <div class="settings-dropdown-inner">
+            <button id="light-mode-btn" class="btn btn-primary w-100">Light Mode</button>
+            <button id="dark-mode-btn" class="btn btn-secondary w-100">Dark Mode</button>
+            <div class="flex gap-2 font-controls">
+              <button id="font-increase" class="btn btn-primary w-100" aria-label="Increase font size">A+</button>
+              <button id="font-decrease" class="btn btn-primary w-100" aria-label="Decrease font size">A-</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <% else %>
       <%= link_to "Login", new_author_session_path, class: "btn btn-primary" %>
       <%= link_to "Sign Up", new_author_registration_path, class: "btn btn-secondary" %>
     <% end %>
   </div>
 </nav>
-
+  
 
     <!-- Flash Messages -->
     <% flash.each do |type, msg| %>
@@ -49,7 +75,87 @@
       <%= yield %>
     </main>
 
-   <%= javascript_include_tag "application", type: "module" %>
+<%= javascript_importmap_tags %>
+<%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var settingsButton = document.getElementById('settings-btn');
+        var settingsMenu = document.getElementById('settings-menu');
+        var lightModeBtn = document.getElementById('light-mode-btn');
+        var darkModeBtn = document.getElementById('dark-mode-btn');
+        var fontIncreaseBtn = document.getElementById('font-increase');
+        var fontDecreaseBtn = document.getElementById('font-decrease');
+
+        if (!settingsButton || !settingsMenu) { return; }
+
+        // Load persisted preferences
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+          document.body.classList.add('dark-mode');
+        } else if (savedTheme === 'light') {
+          document.body.classList.remove('dark-mode');
+        }
+
+        var savedFontPercent = parseInt(localStorage.getItem('fontPercent'), 10);
+        if (!isNaN(savedFontPercent)) {
+          document.documentElement.style.fontSize = savedFontPercent + '%';
+        }
+
+        // Toggle menu visibility
+        settingsButton.addEventListener('click', function (e) {
+          e.stopPropagation();
+          settingsMenu.classList.toggle('hidden');
+        });
+
+        // Click outside to close
+        document.addEventListener('click', function (e) {
+          if (!settingsMenu.classList.contains('hidden')) {
+            var isClickInside = settingsMenu.contains(e.target) || settingsButton.contains(e.target);
+            if (!isClickInside) { settingsMenu.classList.add('hidden'); }
+          }
+        });
+
+        // Theme handlers
+        if (lightModeBtn) {
+          lightModeBtn.addEventListener('click', function () {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+          });
+        }
+        if (darkModeBtn) {
+          darkModeBtn.addEventListener('click', function () {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+          });
+        }
+
+        // Font size handlers
+        function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
+        function getCurrentFontPercent() {
+          var computed = window.getComputedStyle(document.documentElement).fontSize;
+          var base = 16; // typical default
+          var currentPx = parseFloat(computed) || base;
+          return Math.round((currentPx / base) * 100);
+        }
+        function setFontPercent(percent) {
+          var clamped = clamp(percent, 85, 160);
+          document.documentElement.style.fontSize = clamped + '%';
+          localStorage.setItem('fontPercent', String(clamped));
+        }
+        if (fontIncreaseBtn) {
+          fontIncreaseBtn.addEventListener('click', function () {
+            setFontPercent(getCurrentFontPercent() + 10);
+          });
+        }
+        if (fontDecreaseBtn) {
+          fontDecreaseBtn.addEventListener('click', function () {
+            setFontPercent(getCurrentFontPercent() - 10);
+          });
+        }
+      });
+    </script>
 
   </body>
 </html>
+

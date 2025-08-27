@@ -6,4 +6,5 @@ class Author < ApplicationRecord
 
          has_many :books, dependent: :destroy
          has_many :comments
+         has_many :chapters, dependent: :destroy
 end

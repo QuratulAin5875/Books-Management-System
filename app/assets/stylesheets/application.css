@@ -5,11 +5,11 @@
 
 /* ---------- Base ---------- */
 body {
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  font-family:  Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f5f7fb;
-  color: #333;
+  background: #f2f5f8;
+  color: #2b2f33;
   line-height: 1.6;
 }
 
@@ -21,23 +21,25 @@ h1, h2, h3, h4, h5, h6 {
 
 a {
   text-decoration: none;
-  color: #007bff;
+  color: #00448c;
   transition: color 0.2s ease;
 }
 
 a:hover {
   text-decoration: underline;
-  color: #0056b3;
+  color: #003874;
 }
 
 .container {
   width: 90%;
   max-width: 1100px;
-  margin: 30px auto;
-  padding: 25px;
-  background: #fff;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f0f0f0;
   border-radius: 12px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.08);
+  color: #000000;
+  border-color: #0056b3;
 }
 
 /* ---------- Forms ---------- */
@@ -46,7 +48,7 @@ a:hover {
   max-width: 450px;
   margin: 50px auto;
   padding: 35px;
-  background: #fff;
+  background: #f8f8f8;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
@@ -55,8 +57,8 @@ a:hover {
   text-align: center;
   margin-bottom: 25px;
   font-size: 26px;
-  font-weight: bold;
-  color: #111;
+  font-weight: inherit;
+  color: #443f3f;
 }
 
 .form-group {
@@ -66,7 +68,7 @@ a:hover {
 .form-label {
   display: block;
   margin-bottom: 6px;
-  font-weight: 600;
+  font-weight: 700;
   color: #444;
 }
 
@@ -74,6 +76,7 @@ a:hover {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid #ddd;
+  background-color: #f3fcff;
   border-radius: 8px;
   font-size: 15px;
   transition: border 0.2s ease, box-shadow 0.2s ease;
@@ -95,7 +98,7 @@ a:hover {
 .btn {
   display: inline-block;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   font-size: 14px;
   font-weight: bold;
   text-align: center;
@@ -133,7 +136,7 @@ a:hover {
 }
 
 .book-card {
-  background: #fff;
+  background: #f8fdfd;
   padding: 22px;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
@@ -163,6 +166,16 @@ a:hover {
   margin-top: 15px;
 }
 
+.inline-actions { display: inline-flex; gap: 8px; align-items: center; }
+.inline-form { display: inline-block; margin: 0; }
+
+.book-index-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
 /* ---------- Book Show & Edit Pages ---------- */
 .book-detail {
   background: #fff;
@@ -170,6 +183,95 @@ a:hover {
   border-radius: 14px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   margin-top: 20px;
+}
+
+.book-show-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.meta-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meta-value {
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.section-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 18px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.chapter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chapter-list-item { display: flex; align-items: center; gap: 8px; }
+
+.section-footer { margin-top: 22px; }
+
+.comment-box {
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: #f9fafb;
+}
+
+.comment-input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .book-detail h2 {
@@ -188,15 +290,6 @@ a:hover {
   margin-top: 25px;
   display: flex;
   gap: 15px;
-}
-
-
-.page-title {
-  text-align: center;
-  font-size: 28px;
-  margin: 20px 0;
-  font-weight: bold;
-  color: #333;
 }
 
 .table-container {
@@ -236,4 +329,371 @@ a:hover {
 
 .styled-table tbody tr:hover {
   background-color: #f1f1f1;
+}
+
+.chapter-link {
+  display: block;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: #374151; /* gray-700 */
+  text-decoration: none;
+  background: linear-gradient(135deg, #f9fafb, #f5f7ff); /* grayish-blue */
+  border: 1px solid #b3c4d5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.chapter-link:hover {
+  color: #2563eb; /* blue-600 */
+  background: linear-gradient(135deg, #eef2ff, #f3f4f6);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.chapter-content {
+  font-size: 16px; /* Default font size for chapters */
+}
+
+.edit-link {
+  color: #16a34a; /* green-600 */
+  font-size: 0.85rem;
+}
+
+.delete-link {
+  color: #dc2626; /* red-600 */
+  font-size: 0.85rem;
+}
+
+.chapter-actions {
+  margin-left: 8px;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  background: #ffffff;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nav-left, .nav-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #111;
+}
+
+.nav-link {
+  color: #2563eb;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover { color: #1d4ed8; }
+.settings-wrapper { position: relative; }
+.settings-btn { background: #10b981; }
+.settings-btn:hover { background: #059669; }
+
+/* ---------- Flash Messages ---------- */
+.flash {
+  padding: 15px;
+  margin: 15px auto;
+  width: 90%;
+  max-width: 1100px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.flash.notice {
+  background: #dcfce7;
+  color: #065f46;
+}
+
+.flash.alert {
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+/* ---------- Comments ---------- */
+#comments {
+  margin-top: 20px;
+}
+
+.comment {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  color: #333;
+}
+
+.comment p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.comment-meta {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+/* ---------- Settings Menu ---------- */
+.hidden { display: none; }
+
+#settings-btn {
+  position: relative;
+  z-index: 20;
+}
+/* Override Tailwind's hidden for settings menu */
+#settings-menu.hidden { display: none !important; }
+
+#settings-menu {
+  transform-origin: top right;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  z-index: 1000;
+}
+
+#settings-menu:not(.hidden) {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.settings-dropdown {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.settings-dropdown-inner {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+
+/* ---------- Dark Mode Styles ---------- */
+.dark-mode {
+  background: #121212;
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode h1, .dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode h5, .dark-mode h6 {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode a {
+  color: #60a5fa; /* blue-400 */
+}
+
+.dark-mode a:hover {
+  color: #3b82f6; /* blue-500 */
+}
+
+.dark-mode .container, .dark-mode .form-container, .dark-mode .book-card, .dark-mode .book-detail {
+  background: #1f2937; /* gray-800 */
+  box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .meta-item {
+  background: #111827; /* gray-900 */
+  border-color: #374151; /* gray-700 */
+}
+
+.dark-mode .section-card {
+  background: #1f2937; /* gray-800 */
+  border-color: #374151; /* gray-700 */
+}
+
+.dark-mode .form-label {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .form-input {
+  background: #374151; /* gray-700 */
+  border-color: #4b5563; /* gray-600 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .form-input:focus {
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+}
+
+.dark-mode .btn-primary {
+  background: #3b82f6; /* blue-500 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .btn-primary:hover {
+  background: #2563eb; /* blue-600 */
+}
+
+.dark-mode .btn-secondary {
+  background: #4b5563; /* gray-600 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .btn-secondary:hover {
+  background: #374151; /* gray-700 */
+}
+
+.dark-mode .btn-warning {
+  background: #f59e0b; /* amber-500 */
+  color: #1f2937; /* gray-800 */
+}
+
+.dark-mode .btn-warning:hover {
+  background: #d97706; /* amber-600 */
+}
+
+.dark-mode .btn-danger {
+  background: #ef4444; /* red-500 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .btn-danger:hover {
+  background: #dc2626; /* red-600 */
+}
+
+.dark-mode .book-title {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .book-detail p {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .styled-table {
+  background: #1f2937; /* gray-800 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .styled-table thead tr {
+  background-color: #3b82f6; /* blue-500 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .styled-table th,
+.dark-mode .styled-table td {
+  border-color: #4b5563; /* gray-600 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .styled-table tbody tr {
+  background-color: #1f2937; /* gray-800 */
+}
+
+.dark-mode .styled-table tbody tr:nth-of-type(even) {
+  background-color: #374151; /* gray-700 */
+}
+
+.dark-mode .styled-table tbody tr:hover {
+  background-color: #4b5563; /* gray-600 */
+}
+
+.dark-mode .chapter-link {
+  background: linear-gradient(135deg, #374151, #1f2937); /* gray-700 to gray-800 */
+  border-color: #4b5563; /* gray-600 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .chapter-new-page {
+  background: linear-gradient(135deg, #374151, #1f2937); /* gray-700 to gray-800 */
+  border-color: #4b5563; /* gray-600 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .chapter-form-card {
+  background: linear-gradient(135deg, #384c6c, #1f2937); /* gray-700 to gray-800 */
+  border-color: #475b77; /* gray-600 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .chapter-link:hover {
+  background: linear-gradient(135deg, #4b5563, #374151); /* gray-600 to gray-700 */
+  color: #93c5fd; /* blue-300 */
+}
+
+.dark-mode .chapter-content {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .edit-link {
+  color: #22c55e; /* green-500 */
+}
+
+.dark-mode .delete-link {
+  color: #ef4444; /* red-500 */
+}
+
+.dark-mode .navbar {
+  background: #1f2937; /* gray-800 */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.dark-mode .nav-brand {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .nav-link {
+  color: #60a5fa; /* blue-400 */
+}
+
+.dark-mode .nav-link:hover {
+  color: #3b82f6; /* blue-500 */
+}
+
+.dark-mode .flash {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .flash.notice {
+  background: #15803d; /* green-700 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .flash.alert {
+  background: #991b1b; /* red-800 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode #settings-menu {
+  background: #1f2937; /* gray-800 */
+  border-color: #374151; /* gray-700 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode #comments {
+  background: #1f2937; /* gray-800 */
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .comment-box {
+  background: #1f2937; /* gray-800 */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .comment p {
+  color: #f9fafb; /* gray-100 */
+}
+
+.dark-mode .comment-meta {
+  color: #d1d5db; /* gray-300 */
 }
