@@ -1,57 +1,110 @@
-import "@hotwired/turbo-rails"
+import "@hotwired/turbo-rails";
 
 function initSettingsMenu() {
-  var settingsButton = document.getElementById('settings-btn');
-  var settingsMenu = document.getElementById('settings-menu');
-  var lightModeBtn = document.getElementById('light-mode-btn');
-  var darkModeBtn = document.getElementById('dark-mode-btn');
-  var fontIncreaseBtn = document.getElementById('font-increase');
-  var fontDecreaseBtn = document.getElementById('font-decrease');
-  var chapterBody = document.querySelector('.book-chapter-body');
+  const settingsButton = document.getElementById('settings-btn');
+  const settingsMenu = document.getElementById('settings-menu');
+  const lightModeBtn = document.getElementById('light-mode-btn');
+  const darkModeBtn = document.getElementById('dark-mode-btn');
+  const fontIncreaseBtn = document.getElementById('font-increase');
+  const fontDecreaseBtn = document.getElementById('font-decrease');
 
-  if (!settingsButton || !settingsMenu) { return; }
-
-  var savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') { document.body.classList.add('dark-mode'); }
-  if (savedTheme === 'light') { document.body.classList.remove('dark-mode'); }
-
-  var savedFontPercent = parseInt(localStorage.getItem('chapterFontPercent'), 10);
-  if (!isNaN(savedFontPercent) && chapterBody) {
-    chapterBody.style.fontSize = savedFontPercent + '%';
+  if (!settingsButton || !settingsMenu) {
+    console.warn('Settings elements missing:', { settingsButton, settingsMenu });
+    return;
   }
 
-  settingsButton.addEventListener('click', function (e) {
+  // Prevent duplicate listeners
+  if (settingsButton.dataset.listenerAttached === "true") return;
+  settingsButton.dataset.listenerAttached = "true";
+
+  // Apply saved theme
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') document.body.classList.add('dark-mode');
+  if (savedTheme === 'light') document.body.classList.remove('dark-mode');
+
+  // Apply saved font size
+  const savedFontPercent = parseInt(localStorage.getItem('chapterFontPercent'), 10);
+  if (!isNaN(savedFontPercent)) {
+    const chapterBody = document.querySelector('.book-chapter-body');
+    if (chapterBody) {
+      chapterBody.style.fontSize = savedFontPercent + '%';
+    }
+  }
+
+  // Toggle settings menu
+  settingsButton.addEventListener('click', (e) => {
+    console.log("In setting event listner");
     e.stopPropagation();
-    var expanded = settingsButton.getAttribute('aria-expanded') === 'true';
+    debugger;
+    const expanded = settingsButton.getAttribute('aria-expanded') === 'true';
     settingsButton.setAttribute('aria-expanded', (!expanded).toString());
     settingsMenu.classList.toggle('hidden');
   });
 
-  document.addEventListener('click', function (e) {
-    if (!settingsMenu.classList.contains('hidden')) {
-      var isInside = settingsMenu.contains(e.target) || settingsButton.contains(e.target);
-      if (!isInside) { settingsMenu.classList.add('hidden'); settingsButton.setAttribute('aria-expanded','false'); }
+  // Close menu on outside click
+  document.addEventListener('click', (e) => {
+    if (!settingsMenu.classList.contains('hidden') && !settingsMenu.contains(e.target) && !settingsButton.contains(e.target)) {
+      settingsMenu.classList.add('hidden');
+      settingsButton.setAttribute('aria-expanded', 'false');
     }
   });
 
-  if (lightModeBtn) lightModeBtn.addEventListener('click', function () { document.body.classList.remove('dark-mode'); localStorage.setItem('theme','light'); });
-  if (darkModeBtn) darkModeBtn.addEventListener('click', function () { document.body.classList.add('dark-mode'); localStorage.setItem('theme','dark'); });
+  // Theme buttons
+  if (lightModeBtn) {
+    lightModeBtn.addEventListener('click', () => {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+      console.log('Light mode activated');
+    });
+  }
+  
+  if (darkModeBtn) {
+    darkModeBtn.addEventListener('click', () => {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+      console.log('Dark mode activated');
+    });
+  }
 
-  function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+  // Font size adjustment
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+  
   function getCurrentFontPercent() {
-    var target = chapterBody || document.body;
-    var computed = window.getComputedStyle(target).fontSize;
-    var base = 16; var currentPx = parseFloat(computed) || base;
+    const chapterBody = document.querySelector('.book-chapter-body');
+    if (!chapterBody) return 100;
+    
+    const computed = window.getComputedStyle(chapterBody).fontSize;
+    const base = 16;
+    const currentPx = parseFloat(computed) || base;
     return Math.round((currentPx / base) * 100);
   }
+  
   function setFontPercent(percent) {
-    var clamped = clamp(percent, 85, 200);
-    if (chapterBody) { chapterBody.style.fontSize = clamped + '%'; }
-    localStorage.setItem('chapterFontPercent', String(clamped));
+    const clamped = clamp(percent, 85, 200);
+    const chapterBody = document.querySelector('.book-chapter-body');
+    if (chapterBody) {
+      chapterBody.style.fontSize = clamped + '%';
+      localStorage.setItem('chapterFontPercent', String(clamped));
+      console.log('Font size set to:', clamped + '%');
+    }
   }
-  if (fontIncreaseBtn) fontIncreaseBtn.addEventListener('click', function () { setFontPercent(getCurrentFontPercent() + 10); });
-  if (fontDecreaseBtn) fontDecreaseBtn.addEventListener('click', function () { setFontPercent(getCurrentFontPercent() - 10); });
+
+  if (fontIncreaseBtn) {
+    fontIncreaseBtn.addEventListener('click', () => {
+      setFontPercent(getCurrentFontPercent() + 10);
+    });
+  }
+  
+  if (fontDecreaseBtn) {
+    fontDecreaseBtn.addEventListener('click', () => {
+      setFontPercent(getCurrentFontPercent() - 10);
+    });
+  }
 }
 
+// Initialize on various events
 document.addEventListener('DOMContentLoaded', initSettingsMenu);
 document.addEventListener('turbo:load', initSettingsMenu);
+document.addEventListener('turbo:render', initSettingsMenu);

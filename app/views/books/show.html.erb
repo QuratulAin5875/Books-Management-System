@@ -1,123 +1,425 @@
-<h1 class="page-title"><%= @book.title %></h1>
-
-<p><strong>Author:</strong> <%= @book.author_name %></p>
-<p><strong>Publisher:</strong> <%= @book.publisher %></p>
-<p><strong>Published Date:</strong> <%= @book.published_date %></p>
-<p><strong>Status:</strong> <%= @book.status %></p>
-
-<div class="section-card">
-  <div class="section-header">
-    <h2>About this Book</h2>
+<div class="book-show-container">
+  <!-- Book Header with colorful gradient -->
+  <div class="book-header">
+    <h1 class="book-title"><%= @book.title %></h1>
+    <div class="book-meta-row">
+      <div class="book-meta-item">
+        <span class="meta-label">👤 Author</span>
+        <span class="meta-value"><%= @book.author_name %></span>
+      </div>
+      <div class="book-meta-item">
+        <span class="meta-label">🏢 Publisher</span>
+        <span class="meta-value"><%= @book.publisher %></span>
+      </div>
+      <div class="book-meta-item">
+        <span class="meta-label">📅 Published</span>
+        <span class="meta-value"><%= @book.published_date %></span>
+      </div>
+      <div class="book-meta-item">
+        <span class="meta-label">📊 Status</span>
+        <span class="meta-value status-<%= @book.status.downcase %>"><%= @book.status %></span>
+      </div>
+    </div>
   </div>
-  <p><%= @book.about.presence || "No description added yet." %></p>
-</div>
 
-<div class="section-card">
-  <div class="section-header">
-    <h2>Chapters</h2>
-    <% if author_signed_in? && @book.author == current_author %>
-      <%= link_to "Add Chapter", new_book_chapter_path(@book), class: "btn btn-primary" %>
-    <% end %>
+  <!-- About Section with enhanced styling -->
+  <div class="section-card about-section">
+    <div class="section-header">
+      <h2>📖 About this Book</h2>
+    </div>
+    <div class="about-content">
+      <p><%= @book.about.presence || "No description added yet." %></p>
+    </div>
   </div>
-  <% if @book.chapters&.any? %>
-    <ol class="chapter-list">
-      <% @book.chapters.each do |chapter| %>
-        <li class="chapter-list-item">
-          <%= link_to chapter.title, book_chapter_path(@book, chapter), class: "chapter-link" %>
-          <% if @book.author == current_author %>
-            <div class="inline-actions">
-              <%= link_to "Edit", edit_book_chapter_path(@book, chapter), class: "btn btn-warning btn-sm" %>
-              <%= button_to "Delete", book_chapter_path(@book, chapter), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm inline-form" %>
-            </div>
-          <% end %>
-        </li>
+
+  <!-- Chapters Section with enhanced styling -->
+  <div class="section-card chapters-section">
+    <div class="section-header">
+      <h2>📚 Chapters</h2>
+      <% if author_signed_in? && @book.author == current_author %>
+        <%= link_to "➕ Add Chapter", new_book_chapter_path(@book), class: "btn btn-primary add-chapter-btn" %>
       <% end %>
-    </ol>
-  <% else %>
-    <p>No chapters yet.</p>
-  <% end %>
-</div>
-
-<hr>
-
-<h2>Comments</h2>
-
-<% if @book.comments.any? %>
-  <div class="comments-list">
-    <% @book.comments.each do |comment| %>
-      <div class="comment-box">
-        <p>
-          <strong><%= comment.author.email %>:</strong>
-          <%= comment.content %>
-        </p>
-        <% if comment.author == current_author %>
-          <div class="inline-actions">
-            <%= link_to "Edit", edit_book_comment_path(@book, comment), class: "btn btn-sm btn-warning" %>
-            <%= button_to "Delete", book_comment_path(@book, comment), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger inline-form" %>
-          </div>
+    </div>
+    <% if @book.chapters&.any? %>
+      <ol class="chapter-list">
+        <% @book.chapters.each do |chapter| %>
+          <li class="chapter-list-item">
+            <%= link_to chapter.title, book_chapter_path(@book, chapter), class: "chapter-link" %>
+            <% if @book.author == current_author %>
+              <div class="inline-actions">
+                <%= link_to "✏️ Edit", edit_book_chapter_path(@book, chapter), class: "btn btn-warning btn-sm" %>
+                <%= button_to "🗑️ Delete", book_chapter_path(@book, chapter), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm inline-form" %>
+              </div>
+            <% end %>
+          </li>
         <% end %>
+      </ol>
+    <% else %>
+      <div class="no-chapters">
+        <p>📝 No chapters yet. Start writing your story!</p>
       </div>
     <% end %>
   </div>
-<% else %>
-  <p>No comments yet.</p>
-<% end %>
-<% if author_signed_in? %>
-  <h3>Add a Comment</h3>
-  <%= form_with(model: [@book, Comment.new], local: true) do |form| %>
-    <div class="form-group">
-      <%= form.text_area :content,
-            placeholder: "Write your comment here...",
-            rows: 3,
-            class: "form-control comment-input" %>
-    </div>
-    <div class="form-group">
-      <%= form.submit "Post Comment", class: "btn btn-primary" %>
-    </div>
-  <% end %>
-<% else %>
-  <p>You must be logged in as an author to comment.</p>
-<% end %>
 
-<!-- ✨ Add only textarea style -->
+  <!-- Comments Section with enhanced styling -->
+  <div class="section-card comments-section">
+    <div class="section-header">
+      <h2>💬 Comments</h2>
+    </div>
+    
+    <% if @book.comments.any? %>
+      <div class="comments-list">
+        <% @book.comments.each do |comment| %>
+          <div class="comment-box">
+            <div class="comment-header">
+              <span class="comment-author">👤 <%= comment.author.email %></span>
+            </div>
+            <div class="comment-content">
+              <%= comment.content %>
+            </div>
+            <% if comment.author == current_author %>
+              <div class="comment-actions">
+                <%= link_to "✏️ Edit", edit_book_comment_path(@book, comment), class: "btn btn-sm btn-warning" %>
+                <%= button_to "🗑️ Delete", book_comment_path(@book, comment), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger inline-form" %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="no-comments">
+        <p>💭 No comments yet. Be the first to share your thoughts!</p>
+      </div>
+    <% end %>
+    
+    <% if author_signed_in? %>
+      <div class="add-comment-section">
+        <h3>💭 Add a Comment</h3>
+        <%= form_with(model: [@book, Comment.new], local: true) do |form| %>
+          <div class="form-group">
+            <%= form.text_area :content,
+                  placeholder: "Write your comment here...",
+                  rows: 3,
+                  class: "form-control comment-input" %>
+          </div>
+          <div class="form-group">
+            <%= form.submit "📤 Post Comment", class: "btn btn-primary post-comment-btn" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="login-prompt">
+        <p>🔐 You must be logged in as an author to comment.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Back Button -->
+  <div class="back-section">
+    <%= link_to "← Back", (request.referer || all_books_path), class: "btn btn-secondary back-btn" %>
+  </div>
+</div>
+
 <style>
+  .book-show-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .book-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .book-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+  }
+
+  .book-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 30px 0;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .book-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .book-meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .meta-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-weight: 500;
+  }
+
+  .meta-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: rgba(255,255,255,0.2);
+    padding: 8px 16px;
+    border-radius: 25px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .status-published {
+    background: rgba(34, 197, 94, 0.3) !important;
+    border-color: rgba(34, 197, 94, 0.5) !important;
+  }
+
+  .status-draft {
+    background: rgba(251, 191, 36, 0.3) !important;
+    border-color: rgba(251, 191, 36, 0.5) !important;
+  }
+
+  .section-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+  }
+
+  .section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .section-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .add-chapter-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .add-chapter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .about-content {
+    color: #475569;
+    line-height: 1.7;
+    font-size: 1.1rem;
+  }
+
+  .chapter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .chapter-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .chapter-list-item:hover {
+    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    border-color: #c7d2fe;
+    transform: translateX(5px);
+  }
+
+  .chapter-link {
+    flex: 1;
+    color: #374151;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .chapter-link:hover {
+    color: #2563eb;
+  }
+
+  .no-chapters, .no-comments {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+    font-size: 1.1rem;
+  }
+
+  .comment-box {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .comment-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .comment-header {
+    margin-bottom: 10px;
+  }
+
+  .comment-author {
+    font-weight: 600;
+    color: #2563eb;
+    font-size: 0.95rem;
+  }
+
+  .comment-content {
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+
+  .comment-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .add-comment-section {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px solid #e2e8f0;
+  }
+
+  .add-comment-section h3 {
+    color: #1e293b;
+    margin-bottom: 20px;
+  }
+
   .comment-input {
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px;
-    font-size: 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 1rem;
     width: 100%;
-    resize: none;
-    transition: border-color 0.2s ease;
+    resize: vertical;
+    transition: all 0.3s ease;
+    background: #ffffff;
   }
 
   .comment-input:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0px 0px 4px rgba(0, 123, 255, 0.3);
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   }
-</style>
-<hr>
 
-<hr>
+  .post-comment-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
 
-<%= link_to "Back", (request.referer || all_books_path), class: "btn btn-secondary" %>
+  .post-comment-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
 
-<style>
-  .page-title {
-    margin-bottom: 20px;
+  .login-prompt {
+    text-align: center;
+    padding: 30px;
+    color: #64748b;
+    font-size: 1.1rem;
   }
-  .comments-list {
-    margin-top: 15px;
+
+  .back-section {
+    text-align: center;
+    margin-top: 40px;
   }
-  .comment-box {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+
+  .back-btn {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
   }
-  .comment-actions {
-    margin-top: 5px;
+
+  .back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .book-meta-row {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .book-meta-item {
+      min-width: auto;
+    }
+    
+    .book-title {
+      font-size: 2rem;
+    }
+    
+    .book-header {
+      padding: 30px 20px;
+    }
   }
 </style>

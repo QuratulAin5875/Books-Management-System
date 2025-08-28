@@ -1,24 +1,416 @@
-<h1><%= @chapter.title %></h1>
-<hr>
+<div class="chapter-container">
+  <!-- Book Link at Top -->
+  <div class="book-link-section">
+    <%= link_to book_path(@book), class: "book-link" do %>
+      <span class="book-icon">📚</span>
+      <span class="book-title-text"><%= @book.title %></span>
+      <span class="book-author-text">by <%= @book.author_name %></span>
+    <% end %>
+  </div>
 
-<div class="book-chapter-body">
-  <%= simple_format(@chapter.body) %>
-</div>
+  <!-- Chapter Header -->
+  <div class="chapter-header">
+    <h1 class="chapter-title"><%= @chapter.title %></h1>
+    <div class="chapter-meta">
+      <span class="chapter-number">Chapter <%= @chapter.id %></span>
+      <span class="chapter-date"><%= @chapter.created_at.strftime("%B %d, %Y") %></span>
+    </div>
+  </div>
 
-<hr>
+  <!-- Chapter Content -->
+  <div class="chapter-content">
+    <div class="book-chapter-body">
+      <%= simple_format(@chapter.body) %>
+    </div>
+  </div>
 
-<div class="inline-actions">
+  <!-- Chapter Navigation -->
+  <div class="chapter-navigation">
+    <div class="nav-buttons">
+      <% if @chapter.has_previous? %>
+        <%= link_to book_chapter_path(@book, @chapter.previous_chapter), class: "nav-btn prev-btn" do %>
+          <span class="nav-icon">←</span>
+          <span class="nav-text">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title"><%= @chapter.previous_chapter.title %></span>
+          </span>
+        <% end %>
+      <% else %>
+        <div class="nav-btn prev-btn disabled">
+          <span class="nav-icon">←</span>
+          <span class="nav-text">
+            <span class="nav-label">Previous</span>
+            <span class="nav-title">No Previous Chapter</span>
+          </span>
+        </div>
+      <% end %>
+
+      <div class="nav-center">
+        <%= link_to book_path(@book), class: "book-home-btn" do %>
+          <span class="book-home-icon">🏠</span>
+          <span>Book Home</span>
+        <% end %>
+      </div>
+
+      <% if @chapter.has_next? %>
+        <%= link_to book_chapter_path(@book, @chapter.next_chapter), class: "nav-btn next-btn" do %>
+          <span class="nav-text">
+            <span class="nav-label">Next</span>
+            <span class="nav-title"><%= @chapter.next_chapter.title %></span>
+          </span>
+          <span class="nav-icon">→</span>
+        <% end %>
+      <% else %>
+        <div class="nav-btn next-btn disabled">
+          <span class="nav-text">
+            <span class="nav-label">Next</span>
+            <span class="nav-title">No Next Chapter</span>
+          </span>
+          <span class="nav-icon">→</span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Author Actions -->
   <% if @book.author == current_author %>
-    <%= link_to "Edit Chapter", edit_book_chapter_path(@book, @chapter), class: "btn btn-warning btn-sm" %>
-    <%= button_to "Delete", book_chapter_path(@book, @chapter), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm inline-form" %>
+    <div class="author-actions">
+      <h3>Author Actions</h3>
+      <div class="action-buttons">
+        <%= link_to edit_book_chapter_path(@book, @chapter), class: "btn btn-warning action-btn" do %>
+          <span class="action-icon">✏️</span>
+          Edit Chapter
+        <% end %>
+        <%= button_to book_chapter_path(@book, @chapter), method: :delete, data: { confirm: "Are you sure you want to delete this chapter?" }, class: "btn btn-danger action-btn" do %>
+          <span class="action-icon">🗑️</span>
+          Delete Chapter
+        <% end %>
+      </div>
+    </div>
   <% end %>
-  <%= link_to "Back to Book", book_path(@book), class: "btn btn-secondary btn-sm" %>
 </div>
 
 <style>
-  .book-chapter-body { white-space: pre-wrap; line-height: 1.6; }
-  .book-chapter-body p { margin-bottom: 12px; }
-  .book-chapter-body pre { background: #f7f7f7; padding: 10px; border-radius: 4px; }
-  .book-chapter-body code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
+  .chapter-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  /* Book Link Section */
+  .book-link-section {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .book-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+
+  .book-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    color: white;
+    text-decoration: none;
+  }
+
+  .book-icon {
+    font-size: 1.5rem;
+  }
+
+  .book-title-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .book-author-text {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  /* Chapter Header */
+  .chapter-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 16px;
+    border: 2px solid #e2e8f0;
+  }
+
+  .chapter-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 15px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .chapter-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1rem;
+    color: #64748b;
+  }
+
+  .chapter-number {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .chapter-date {
+    background: rgba(100, 116, 139, 0.1);
+    color: #64748b;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* Chapter Content */
+  .chapter-content {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .book-chapter-body {
+    white-space: pre-wrap;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #334155;
+    font-family: 'Georgia', serif;
+  }
+
+  .book-chapter-body p {
+    margin-bottom: 20px;
+    text-align: justify;
+  }
+
+  .book-chapter-body pre {
+    background: #f1f5f9;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    overflow-x: auto;
+  }
+
+  .book-chapter-body code {
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Consolas', monospace;
+    color: #dc2626;
+  }
+
+  /* Chapter Navigation */
+  .chapter-navigation {
+    margin-bottom: 40px;
+  }
+
+  .nav-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: #374151;
+    text-decoration: none;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 300px;
+  }
+
+  .nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    color: #374151;
+    text-decoration: none;
+  }
+
+  .nav-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .nav-btn.disabled:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .prev-btn {
+    text-align: left;
+  }
+
+  .next-btn {
+    text-align: right;
+    flex-direction: row-reverse;
+  }
+
+  .nav-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #667eea;
+  }
+
+  .nav-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.3;
+  }
+
+  .nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .book-home-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  }
+
+  .book-home-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    color: white;
+    text-decoration: none;
+  }
+
+  .book-home-icon {
+    font-size: 1.2rem;
+  }
+
+  /* Author Actions */
+  .author-actions {
+    padding: 25px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-radius: 16px;
+    border: 2px solid #fbbf24;
+  }
+
+  .author-actions h3 {
+    margin: 0 0 20px 0;
+    color: #92400e;
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  .action-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .chapter-container {
+      padding: 15px;
+      margin: 10px;
+    }
+
+    .chapter-title {
+      font-size: 2rem;
+    }
+
+    .nav-buttons {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-btn {
+      max-width: none;
+    }
+
+    .chapter-meta {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .book-link {
+      flex-direction: column;
+      gap: 8px;
+      padding: 20px;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 </style>
 
